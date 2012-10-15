@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<title> Multitouch Graphs</title>
+	<meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+	<link rel="stylesheet" type="text/css" href="css/defaults.css">
+	<link rel="stylesheet" type="text/css" href="css/graph.css">
+
+	<script type="text/javascript" src="libs/underscore.js"></script>
+	<script type="text/javascript" src="libs/jquery.js"></script>
+
+	<script type="text/javascript" src="multitouch.js"></script>
+
+</head>
+<body>
+
+	<div class="chart" id="chart1"></div>
+	<div class="chart" id="chart2"></div>
+	<div id="messages"></div>
+
+<!-- SAMPLE CODE -->
+<script type="text/javascript">
+
+// fake data
+
+/*
+var fakeDataA = [
+[0,   25], [25,   50], [50,  -17], [75,  -20], 
+[100,  5], [125,  45], [150,  65], [175,  75],
+[200, 85], [225,  65], [250,  35], [275,  45]
+];
+
+var fakeDataB = [
+[0,   15 ],[25,   30], [50,   35], [75,   20], 
+[100, 40], [125,  55], [150,  65], [175,  45],
+[200, 55], [225,  35], [250,  45], [275,  55]
+];
+*/
+function genFakeData(offset){
+	return _.zip(
+		_.map(_.range(100), function(v){ return v*15; }),
+		_.map(_.range(100), function(v){ return parseInt(Math.random()*10 + (v/8))*5 - 20 + offset; })
+	);
+}
+
+function genSinusoidal(scale, offset){
+	var x = _.map(_.range(100), function(v){ return v*15; });
+	var y = _.map(x, function(v){ return parseInt(Math.sin(v/scale)*30)+offset;});
+	return _.zip(x,y);
+}
+
+var fakeDataA = genFakeData(0);
+var fakeDataB = genFakeData(-20);
+var fakeDataC = genFakeData(15);
+var fakeDataD = genFakeData(15);
+var fakeDataE = genFakeData(20);
+var fakeDataF = genSinusoidal(60,-10);
+
+// construct the data set
+var ch1 = new timeSeries ( [
+		new dataPointGroup([[0,0],[1500, 0]]),
+		new dataPointGroup(fakeDataA, 'A', 'x', 'y'),
+		new dataPointGroup(fakeDataB, 'B', 'x', 'y'),
+		new dataPointGroup(fakeDataC, 'C', 'x', 'y')
+	],
+	'chart title'
+);
+
+var ch2 = new timeSeries ( [
+		new dataPointGroup([[0,0],[1500, 0]]),
+		new dataPointGroup(fakeDataD, 'D', 'x', 'y'),
+		new dataPointGroup(fakeDataE, 'E', 'x', 'y'),
+		new dataPointGroup(fakeDataF, 'F', 'x', 'y')
+	],
+	'chart title'
+);
+
+// Render
+$('#chart1')[0].appendChild(draw( _.pluck(ch1.elems, 'd'), {height: '200'}));
+var ch1Gesture = pinchGesture('#chart1 svg');
+$('#chart1')[0].addEventListener("gesturechange", ch1Gesture.gestureChange, false);
+$('#chart1')[0].addEventListener("gestureend", ch1Gesture.gestureEnd, false);
+
+$('#chart2')[0].appendChild(draw( _.pluck(ch2.elems, 'd'), {height: '200'}));
+var ch2Gesture = pinchGesture('#chart2 svg');
+$('#chart2')[0].addEventListener("gesturechange", ch2Gesture.gestureChange, false);
+$('#chart2')[0].addEventListener("gestureend", ch2Gesture.gestureEnd, false);
+
+</script>
+
+</body>
+</html>

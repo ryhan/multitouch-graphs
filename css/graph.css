@@ -1,0 +1,30 @@
+/* Graph.CSS */
+
+body{
+	padding: 50px;
+}
+
+.chart{
+
+	/* Appearance */
+	background-image: url('../img/grid.png');
+	background-color: #FFF;
+	border: 1px solid #AAA;
+	border-radius: 3px;
+	box-shadow: inset 0 0 5px #CCC;
+	/* Shape Properties */
+	height: 225px;
+	margin-bottom: 50px;
+	
+	/* Scrolling Properties */
+	overflow-y: hidden;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+
+}
+
+svg{
+	width: 200px;
+	height: 200px;
+	-webkit-transition: all .1s;
+}
