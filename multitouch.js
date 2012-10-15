@@ -66,7 +66,7 @@ var chart = function( dataPointGroups , title)
  */
 var timeSeries = function( dataPointGroups , title)
 {
-	var height = 200;
+	var height = 150;
 	var width = 2000;
 
 	var c = new chart( dataPointGroups, title);
@@ -99,6 +99,45 @@ var timeSeries = function( dataPointGroups , title)
 	});
 };
 
+/**
+ * @constructor
+ * @param {Array} dataPointGroups Array of dataPointGroup objects.
+ * @param {String} title description of chart
+ */
+var areaChart = function( dataPointGroups , title)
+{
+	var height = 150;
+	var width = 2000;
+
+	var c = new chart( dataPointGroups, title);
+
+	var scaleX = function(v){ return width *  c.xAxis.normalize(v);};
+	var scaleY = function(v){ return height - height * c.yAxis.normalize(v);};
+
+	var organizedData = _.map( dataPointGroups, function(d)
+	{
+		var normX = _.map(d.xAxis.data, scaleX);
+		var normY = _.map(d.yAxis.data, scaleY);
+		return {
+			title : d.title,
+			coor: _.zip(normX, normY)
+		}
+	});
+
+	this.elems = _.map( organizedData, function(v)
+	{
+		// Evaluate the d path attribute
+		var moveTo = function(a){ return ["L", a[0], a[1]].join(' ');};
+		var lineArray = _.map(v.coor, moveTo);
+		var d = [ 'M', _.first(v.coor)[0], _.first(v.coor)[1], lineArray.join(' '), 'Z'].join(' ');
+
+		return {
+			title : v.title,
+			d : d
+		}
+	});
+};
+
 function draw( dArray, attr)
 {
 	// Raw supplied data
@@ -112,10 +151,11 @@ function draw( dArray, attr)
 	this.SVG = {};
 	this.SVG.ns 	 = "http://www.w3.org/2000/svg";
 	this.SVG.xlinkns = "http://www.w3.org/1999/xlink";
-	this.SVG.height  = (defined(attr.height))?  attr.height: 200;
+	this.SVG.height  = (defined(attr.height))?  attr.height: 150;
 	this.SVG.width   = (defined(attr.width))?   attr.width:  2000;
 	this.SVG.bgcolor = (defined(attr.bgcolor))? attr.bgcolor: '#F0F0F0'; 
 	this.SVG.fill 	 = 'white';
+	this.SVG.fills 	 = ['#AAA', '#2059DE', '#0089FF', '#1C34BF'];
 	this.SVG.stroke  = '#2E61FF';
 	this.SVG.strokes =  ['#AAA', '#2059DE', '#0089FF', '#1C34BF'];
 	//['#AAA', '#1D76EB','#EB461D', '#EBA61D'];
@@ -132,7 +172,7 @@ function draw( dArray, attr)
 	for(var i=0; i < dArray.length; i++){
 		var path = document.createElementNS(SVG.ns, "path");
 		path.setAttribute('d', dArray[i]);
-		path.setAttribute('fill', this.SVG.fill);
+		path.setAttribute('fill', this.SVG.fills[i%(this.SVG.fills.length)]);
 		path.setAttribute('stroke', this.SVG.strokes[i%(this.SVG.strokes.length)]);
 		path.setAttribute('stroke-width', this.SVG.weight);
 		svg.appendChild(path);

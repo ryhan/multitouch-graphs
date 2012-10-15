@@ -17,9 +17,10 @@
 
 </head>
 <body>
-
 	<div class="chart" id="chart1"></div>
 	<div class="chart" id="chart2"></div>
+	<div class="chart" id="chart3"></div>
+	<div class="chart" id="chart4"></div>
 	<div id="messages"></div>
 
 <!-- SAMPLE CODE -->
@@ -40,29 +41,36 @@ var fakeDataB = [
 [200, 55], [225,  35], [250,  45], [275,  55]
 ];
 */
-function genFakeData(offset){
+function genFakeData(offset, size){
 	return _.zip(
-		_.map(_.range(100), function(v){ return v*15; }),
-		_.map(_.range(100), function(v){ return parseInt(Math.random()*10 + (v/8))*5 - 20 + offset; })
+		_.map(_.range(size), function(v){ return v*15; }),
+		_.map(_.range(size), function(v){ return parseInt(Math.random()*size/6 + (v/2))*5 - 20 + offset; })
 	);
 }
 
 function genSinusoidal(scale, offset){
-	var x = _.map(_.range(100), function(v){ return v*15; });
+	var x = _.map(_.range(60), function(v){ return v*15; });
 	var y = _.map(x, function(v){ return parseInt(Math.sin(v/scale)*30)+offset;});
 	return _.zip(x,y);
 }
 
-var fakeDataA = genFakeData(0);
-var fakeDataB = genFakeData(-20);
-var fakeDataC = genFakeData(15);
-var fakeDataD = genFakeData(15);
-var fakeDataE = genFakeData(20);
-var fakeDataF = genSinusoidal(60,-10);
+var fakeDataA = genFakeData(0, 60);
+var fakeDataB = genFakeData(-40, 60);
+var fakeDataC = genFakeData(35, 60);
+var fakeDataD = genFakeData(-80, 60);
+var fakeDataE = genSinusoidal(30,-10);
+var fakeDataF = [[0,0]].concat(genFakeData(20, 60)).concat([[900,0]]);
+var fakeDataG = [[0,0]].concat(genFakeData(-10, 60)).concat([[900,0]]);
+var fakeDataH = [[0,0]].concat(genFakeData(0, 200)).concat([[3000,0]]);
+var fakeDataI = [[0,0]].concat(genFakeData(-400, 200)).concat([[3000,0]]);
+
+/*[
+	[0,0], [25, 300], [30, 275] , [45, 410],
+	[50,400], [65, 430], [70, 390], [75, 350], [85, 400], [95, 250], [100, 375], [100,0]];*/
 
 // construct the data set
 var ch1 = new timeSeries ( [
-		new dataPointGroup([[0,0],[1500, 0]]),
+		new dataPointGroup([[0,0],[900, 0]]),
 		new dataPointGroup(fakeDataA, 'A', 'x', 'y'),
 		new dataPointGroup(fakeDataB, 'B', 'x', 'y'),
 		new dataPointGroup(fakeDataC, 'C', 'x', 'y')
@@ -71,25 +79,52 @@ var ch1 = new timeSeries ( [
 );
 
 var ch2 = new timeSeries ( [
-		new dataPointGroup([[0,0],[1500, 0]]),
+		new dataPointGroup([[0,0],[900, 0]]),
 		new dataPointGroup(fakeDataD, 'D', 'x', 'y'),
-		new dataPointGroup(fakeDataE, 'E', 'x', 'y'),
-		new dataPointGroup(fakeDataF, 'F', 'x', 'y')
+		new dataPointGroup(fakeDataE, 'E', 'x', 'y')
 	],
 	'chart title'
 );
 
+var ch3 = new areaChart( [
+		new dataPointGroup([[0,0],[900, 0]]),
+		new dataPointGroup(fakeDataF, 'F', 'x', 'y'),
+		new dataPointGroup(fakeDataG, 'G', 'x', 'y')
+	],
+	'chart title'
+);
+
+var ch4 = new areaChart( [
+		new dataPointGroup([[0,0],[3000, 0]]),
+		new dataPointGroup(fakeDataH, 'H', 'x', 'y'),
+		new dataPointGroup(fakeDataI, 'I', 'x', 'y')
+	],
+	'chart title'
+);
+
+
 // Render
-$('#chart1')[0].appendChild(draw( _.pluck(ch1.elems, 'd'), {height: '200'}));
+$('#chart1')[0].appendChild(draw( _.pluck(ch1.elems, 'd'), {height: '150'}));
 var ch1Gesture = pinchGesture('#chart1 svg');
 $('#chart1')[0].addEventListener("gesturechange", ch1Gesture.gestureChange, false);
 $('#chart1')[0].addEventListener("gestureend", ch1Gesture.gestureEnd, false);
 
-$('#chart2')[0].appendChild(draw( _.pluck(ch2.elems, 'd'), {height: '200'}));
+$('#chart2')[0].appendChild(draw( _.pluck(ch2.elems, 'd'), {height: '150'}));
 var ch2Gesture = pinchGesture('#chart2 svg');
 $('#chart2')[0].addEventListener("gesturechange", ch2Gesture.gestureChange, false);
 $('#chart2')[0].addEventListener("gestureend", ch2Gesture.gestureEnd, false);
 
+$('#chart3')[0].appendChild(draw( _.pluck(ch3.elems, 'd'), {height: '150'}));
+var ch3Gesture = pinchGesture('#chart3 svg');
+$('#chart3')[0].addEventListener("gesturechange", ch3Gesture.gestureChange, false);
+$('#chart3')[0].addEventListener("gestureend", ch3Gesture.gestureEnd, false);
+
+$('#chart4')[0].appendChild(draw( _.pluck(ch4.elems, 'd'), {height: '150'}));
+var ch4Gesture = pinchGesture('#chart4 svg');
+$('#chart4')[0].addEventListener("gesturechange", ch4Gesture.gestureChange, false);
+$('#chart4')[0].addEventListener("gestureend", ch4Gesture.gestureEnd, false);
+
+$('div').scrollLeft(2000);
 </script>
 
 </body>
