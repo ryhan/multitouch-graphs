@@ -1,0 +1,81 @@
+/* =============================================================================
+   Default / Reset CSS
+   ========================================================================== */
+
+.m3, 
+SVG{
+	box-sizing: border-box;
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+	position: relative;
+}
+
+SVG{
+	background-color: rgba(150,150,150,0.1);
+}
+
+.m3.m3Container{
+	background-color: white;
+	border: 1px solid #444;
+	position: relative;
+	overflow: hidden;
+}
+
+/* =============================================================================
+   Behavior
+   ========================================================================== */
+
+/* Horizontally Scrollable Regions */
+.m3GestureRegion,
+.m3xAxis
+{
+	overflow-y: hidden;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+ }
+
+/* =============================================================================
+  Layout
+   ========================================================================== */
+
+.m3.m3GestureRegion{
+	position: absolute;
+	top: 0;
+	right: 0;
+
+	box-shadow: 
+		-1px 0 0 #666,
+		inset 2px 0 10px rgba(0,0,0,0.4);
+}
+
+.m3.m3Axis{
+	display: inline-block;
+	position: absolute;
+}
+.m3.m3yAxis{
+	left: 0;
+	top: 0;
+}
+.m3.m3xAxis{
+	bottom: 0;
+	box-shadow: inset 0 1px 0 #AAA;
+	left: 0;
+}
+
+.m3.m3xAxis .m3.m3TextLabel{
+	position: absolute;
+	padding-left: 5px;
+	border-left: 1px solid #888;
+	bottom: 20px;
+	left: 0;
+}
+
+.m3.m3yAxis .m3.m3TextLabel{
+	text-align: right;
+	position: absolute;
+	padding-bottom: 2px;
+	padding-right: 5px;
+	border-bottom: 1px solid #888;
+	right: 2px;
+}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<title> Multitouch Graph Sample</title>
+
+	<meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+	<link rel="stylesheet" type="text/css" href="css/m3.css"/>
+
+	<!-- DEPENDENCY LIBRARIES -->
+	<script type="text/javascript" src="libs/underscore.js"></script>
+	<script type="text/javascript" src="libs/jquery.js"></script>
+
+	<!-- INCLUDE M3.JS -->
+	<script type="text/javascript" src="m3.js"></script>
+
+</head>
+<body>
+
+	<script>
+		
+		var pointArray = [];
+		var tmp = 0;
+		for(var i =0 ; i<100; i++){
+			pointArray.push( new m3.Point(i,tmp));
+			tmp += (Math.floor(Math.random()*6) - 2);
+		}
+		var series = new m3.Series('tmp', pointArray);
+		var g = new m3.Graph('tmp', [series]);
+		
+		document.body.appendChild(g.constructHTML());
+		
+	</script>
+
+</body>
+</html>
