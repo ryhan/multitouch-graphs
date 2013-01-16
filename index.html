@@ -25,13 +25,15 @@
 		var pointArray = [];
 		var tmp = 0;
 		for(var i =0 ; i<100; i++){
-			pointArray.push( new m3.Point(i,tmp));
-			tmp += (Math.floor(Math.random()*6) - 2);
+			pointArray.push( new m3.Point(i*1000*60*60,tmp));
+			tmp += (Math.floor(Math.random()*6) - 0);
 		}
 		var series = new m3.Series('tmp', pointArray);
 		var g = new m3.Graph('tmp', [series]);
 		
 		document.body.appendChild(g.constructHTML());
+		console.log(g.range());
+		console.log('x ' + g.units().x.factor + ' (' + g.units().x.unit + ') , y '+ g.units().y.factor);
 		
 	</script>
 

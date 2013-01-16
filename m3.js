@@ -39,7 +39,7 @@ var DEFAULT_CONFIG = {
 		weight: 2,
 		
 		width: 900,
-		height: 260
+		height: 260 - 50
 	}
 };
 
@@ -414,6 +414,7 @@ var Label = function( text, x, y ){
  */
 var labelFit = function(blocksize, distance, unitConversion, biasLarge){
 	warnIf((blocksize > distance), 'Axis is too small for blockg.time.');
+	
 
 };
 
@@ -436,7 +437,7 @@ Graph.prototype.units = function(){
 	var xAxisLength = this.config.xAxis.width,
 		yAxisLength = this.config.yAxis.height;
 
-	// The number on ms represented per hundred pixels.
+	// The number of ms represented per hundred pixels.
 	// As this ratio increases, the unit size should increase.
 	var timePerHundredPixels = xRange/xAxisLength * 100;
 	var yPerTenPixels = Math.ceil(yRange/yAxisLength *10);
@@ -446,7 +447,7 @@ Graph.prototype.units = function(){
 	// 'unit' represents the human-readable representation of the unit.
 	var xUnitMap = [
 		{factor: 1, unit: 'millisecond'},
-		{factr: 1000, unit: 'second'},
+		{factor: 1000, unit: 'second'},
 		{factor: 60000, unit: 'minute'},
 		{factor: 3600000, unit: 'hour'},
 		{factor: 86400000, unit: 'day'},
@@ -458,6 +459,7 @@ Graph.prototype.units = function(){
 
 	var yUnitMap =  [1, 2, 5, 10, 20, 25, 50, 100, 200, 250, 500, 1000];
 
+	
 	// Checks if the unit fits within the axis/pixel ratio.
 	var xFits = function(unit){return (timePerHundredPixels>unit.factor);};
 	var yFits = function(unit){return (yPerTenPixels>unit);};
@@ -478,13 +480,9 @@ Graph.prototype.units = function(){
  * Generates arrays of label objects for the x and y axis.
  */
 Graph.prototype.labels = function(){
-
 	var units = this.units();
-
 	var xCoor = labelFit(100,this.config.xAxis.width, units.x.factor, true);
 	var yCoor = labelFit(50, this.config.yAxis.height,units.y.factor, false);
-
-	
 
 	return {
 		x: xLabels,
@@ -531,10 +529,12 @@ Graph.prototype.constructHTML = function(){
 
 	}
 
+	/*
 	addLabel('December', 100);
 	addLabel('January', 300);
 	addLabel('February', 500);
 	addLabel('March', 700);
+	*/
 
 	function newLabel(text, location){
 		var labelA = generateDiv('m3 m3TextLabel', {height: 20, width: 30});
@@ -543,12 +543,13 @@ Graph.prototype.constructHTML = function(){
 		yAxis.appendChild(labelA);
 	}
 
+	/*
 	newLabel('40', 30);
 	newLabel('30', 70);
 	newLabel('20', 110);
 	newLabel('10', 150)
 	newLabel('0',  190);
-
+	*/
 	/*
 	var labelA = generateDiv('m3 m3TextLabel', {height: 80, width: 40});
 		labelA.innerHTML = "December 2012";
